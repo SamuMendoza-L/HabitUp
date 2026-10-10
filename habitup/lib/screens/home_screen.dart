@@ -1,9 +1,22 @@
 import 'package:flutter/material.dart';
 
 import 'add_habit_screen.dart';
+import '../models/habit.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final List<Habit> habits = [
+    Habit(name: 'Leer 20 minutos'),
+    Habit(name: 'Meditar 10 minutos'),
+    Habit(name: 'Caminar 30 minutos'),
+    Habit(name: 'Planear mi día'),
+  ];
 
   @override
   Widget build(BuildContext context) {
