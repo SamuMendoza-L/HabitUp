@@ -92,6 +92,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
+                    const SizedBox(height: 8),
+                    Text(
+                      '$completedHabitsCount de ${habits.length} hábitos',
+                      style: const TextStyle(
+                        color: Color(0xFF212529),
+                        fontSize: 15,
+                      ),
+                    ),
                     const SizedBox(height: 16),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(8),
@@ -117,41 +125,73 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 12),
             Expanded(
-              child: ListView.builder(
-                itemCount: habits.length,
-                itemBuilder: (context, index) {
-                  final habit = habits[index];
-
-                  return Card(
-                    color: Colors.white,
-                    elevation: 0,
-                    margin: const EdgeInsets.only(bottom: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      side: const BorderSide(color: Color(0xFFDEE2E6)),
-                    ),
-                    child: CheckboxListTile(
-                      value: habit.isCompleted,
-                      onChanged: (value) {
-                        setState(() {
-                          habit.isCompleted = value ?? false;
-                        });
-                      },
-                      activeColor: const Color(0xFFB9FF2C),
-                      checkColor: const Color(0xFF212529),
-                      controlAffinity: ListTileControlAffinity.trailing,
-                      title: Text(
-                        habit.name,
-                        style: const TextStyle(
-                          color: Color(0xFF212529),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
+              child: habits.isEmpty
+                  ? const Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.checklist_outlined,
+                            color: Color(0xFF6B8E23),
+                            size: 48,
+                          ),
+                          SizedBox(height: 12),
+                          Text(
+                            'Empieza creando tu primer hábito',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Color(0xFF212529),
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            'Registra una rutina y avanza paso a paso.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Color(0xFF6C757D),
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
                       ),
+                    )
+                  : ListView.builder(
+                      itemCount: habits.length,
+                      itemBuilder: (context, index) {
+                        final habit = habits[index];
+
+                        return Card(
+                          color: Colors.white,
+                          elevation: 0,
+                          margin: const EdgeInsets.only(bottom: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            side: const BorderSide(color: Color(0xFFDEE2E6)),
+                          ),
+                          child: CheckboxListTile(
+                            value: habit.isCompleted,
+                            onChanged: (value) {
+                              setState(() {
+                                habit.isCompleted = value ?? false;
+                              });
+                            },
+                            activeColor: const Color(0xFFB9FF2C),
+                            checkColor: const Color(0xFF212529),
+                            controlAffinity: ListTileControlAffinity.trailing,
+                            title: Text(
+                              habit.name,
+                              style: const TextStyle(
+                                color: Color(0xFF212529),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
             ),
             const SizedBox(height: 16),
             SizedBox(
