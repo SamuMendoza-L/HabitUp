@@ -44,6 +44,39 @@ class AddHabitScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 24),
+            const Text(
+              'Nombre del hábito',
+              style: TextStyle(
+                color: Color(0xFF212529),
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 8),
+            TextField(
+              textCapitalization: TextCapitalization.sentences,
+              decoration: InputDecoration(
+                hintText: 'Ej. Leer 20 minutos',
+                hintStyle: const TextStyle(color: Color(0xFF6C757D)),
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 14,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: const BorderSide(color: Color(0xFFDEE2E6)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: const BorderSide(
+                    color: Color(0xFF6B8E23),
+                    width: 2,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
