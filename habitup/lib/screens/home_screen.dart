@@ -67,6 +67,49 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             const SizedBox(height: 24),
+            const Text(
+              'Hábitos de hoy',
+              style: TextStyle(
+                color: Color(0xFF212529),
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Expanded(
+              child: ListView.builder(
+                itemCount: habits.length,
+                itemBuilder: (context, index) {
+                  final habit = habits[index];
+
+                  return Card(
+                    color: Colors.white,
+                    elevation: 0,
+                    margin: const EdgeInsets.only(bottom: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      side: const BorderSide(color: Color(0xFFDEE2E6)),
+                    ),
+                    child: CheckboxListTile(
+                      value: habit.isCompleted,
+                      onChanged: (value) {},
+                      activeColor: const Color(0xFFB9FF2C),
+                      checkColor: const Color(0xFF212529),
+                      controlAffinity: ListTileControlAffinity.trailing,
+                      title: Text(
+                        habit.name,
+                        style: const TextStyle(
+                          color: Color(0xFF212529),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
