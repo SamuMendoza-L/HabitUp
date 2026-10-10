@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class AddHabitScreen extends StatefulWidget {
-  const AddHabitScreen({super.key});
+  const AddHabitScreen({super.key, this.initialName});
+
+  final String? initialName;
 
   @override
   State<AddHabitScreen> createState() => _AddHabitScreenState();
@@ -9,6 +11,21 @@ class AddHabitScreen extends StatefulWidget {
 
 class _AddHabitScreenState extends State<AddHabitScreen> {
   final _formKey = GlobalKey<FormState>();
+  late final TextEditingController _nameController;
+
+  bool get _isEditing => widget.initialName != null;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController(text: widget.initialName ?? '');
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +42,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
           tooltip: 'Volver',
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text('Nuevo hábito'),
+        title: Text(_isEditing ? 'Editar hábito' : 'Nuevo hábito'),
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
@@ -39,10 +56,12 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                   color: Color(0xFF6B8E23),
                 ),
                 const SizedBox(width: 12),
-                const Expanded(
+                Expanded(
                   child: Text(
-                    'Crea una rutina que quieras mantener cada día.',
-                    style: TextStyle(
+                    _isEditing
+                        ? 'Actualiza el nombre de tu hábito.'
+                        : 'Crea una rutina que quieras mantener cada día.',
+                    style: const TextStyle(
                       color: Color(0xFF6C757D),
                       fontSize: 14,
                     ),
@@ -63,6 +82,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
             Form(
               key: _formKey,
               child: TextFormField(
+                controller: _nameController,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 textCapitalization: TextCapitalization.sentences,
                 validator: (value) {
@@ -100,13 +120,17 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  _formKey.currentState!.validate();
+                  if (_formKey.currentState!.validate()) {
+                    Navigator.pop(context, _nameController.text.trim());
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFB9FF2C),
                   foregroundColor: const Color(0xFF212529),
                 ),
-                child: const Text('Guardar hábito'),
+                child: Text(
+                  _isEditing ? 'Guardar cambios' : 'Guardar hábito',
+                ),
               ),
             ),
           ],

@@ -24,6 +24,57 @@ class _HomeScreenState extends State<HomeScreen> {
   double get progress =>
       habits.isEmpty ? 0 : completedHabitsCount / habits.length;
 
+  Future<void> _editHabit(int index) async {
+    final habit = habits[index];
+    final habitName = await Navigator.push<String>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddHabitScreen(initialName: habit.name),
+      ),
+    );
+
+    if (habitName == null) {
+      return;
+    }
+
+    setState(() {
+      habits[index] = Habit(
+        name: habitName,
+        isCompleted: habit.isCompleted,
+      );
+    });
+  }
+
+  Future<void> _deleteHabit(int index) async {
+    final habit = habits[index];
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('¿Eliminar hábito?'),
+        content: Text('Se eliminará "${habit.name}" de tu lista.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: TextButton.styleFrom(
+              foregroundColor: const Color(0xFFB00020),
+            ),
+            child: const Text('Eliminar'),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldDelete == true) {
+      setState(() {
+        habits.removeAt(index);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -180,13 +231,45 @@ class _HomeScreenState extends State<HomeScreen> {
                             activeColor: const Color(0xFFB9FF2C),
                             checkColor: const Color(0xFF212529),
                             controlAffinity: ListTileControlAffinity.trailing,
-                            title: Text(
-                              habit.name,
-                              style: const TextStyle(
-                                color: Color(0xFF212529),
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                              ),
+                            title: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    habit.name,
+                                    style: const TextStyle(
+                                      color: Color(0xFF212529),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                                IconButton(
+                                  tooltip: 'Editar ${habit.name}',
+                                  icon: const Icon(Icons.edit_outlined),
+                                  iconSize: 18,
+                                  color: const Color(0xFF6C757D),
+                                  padding: EdgeInsets.zero,
+                                  visualDensity: VisualDensity.compact,
+                                  constraints: const BoxConstraints(
+                                    minWidth: 32,
+                                    minHeight: 32,
+                                  ),
+                                  onPressed: () => _editHabit(index),
+                                ),
+                                IconButton(
+                                  tooltip: 'Eliminar ${habit.name}',
+                                  icon: const Icon(Icons.delete_outline),
+                                  iconSize: 18,
+                                  color: const Color(0xFF6C757D),
+                                  padding: EdgeInsets.zero,
+                                  visualDensity: VisualDensity.compact,
+                                  constraints: const BoxConstraints(
+                                    minWidth: 32,
+                                    minHeight: 32,
+                                  ),
+                                  onPressed: () => _deleteHabit(index),
+                                ),
+                              ],
                             ),
                           ),
                         );
@@ -197,13 +280,21 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
-                onPressed: () {
-                  Navigator.push(
+                onPressed: () async {
+                  final habitName = await Navigator.push<String>(
                     context,
                     MaterialPageRoute(
                       builder: (context) => const AddHabitScreen(),
                     ),
                   );
+
+                  if (habitName == null) {
+                    return;
+                  }
+
+                  setState(() {
+                    habits.add(Habit(name: habitName));
+                  });
                 },
                 icon: const Icon(Icons.add),
                 label: const Text('Agregar hábito'),
