@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 
-class AddHabitScreen extends StatelessWidget {
+class AddHabitScreen extends StatefulWidget {
   const AddHabitScreen({super.key});
+
+  @override
+  State<AddHabitScreen> createState() => _AddHabitScreenState();
+}
+
+class _AddHabitScreenState extends State<AddHabitScreen> {
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -53,28 +60,53 @@ class AddHabitScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            TextField(
-              textCapitalization: TextCapitalization.sentences,
-              decoration: InputDecoration(
-                hintText: 'Ej. Leer 20 minutos',
-                hintStyle: const TextStyle(color: Color(0xFF6C757D)),
-                filled: true,
-                fillColor: Colors.white,
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 14,
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                  borderSide: const BorderSide(color: Color(0xFFDEE2E6)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                  borderSide: const BorderSide(
-                    color: Color(0xFF6B8E23),
-                    width: 2,
+            Form(
+              key: _formKey,
+              child: TextFormField(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                textCapitalization: TextCapitalization.sentences,
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Ingresa el nombre del hábito';
+                  }
+
+                  return null;
+                },
+                decoration: InputDecoration(
+                  hintText: 'Ej. Leer 20 minutos',
+                  hintStyle: const TextStyle(color: Color(0xFF6C757D)),
+                  filled: true,
+                  fillColor: Colors.white,
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 14,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                    borderSide: const BorderSide(color: Color(0xFFDEE2E6)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                    borderSide: const BorderSide(
+                      color: Color(0xFF6B8E23),
+                      width: 2,
+                    ),
                   ),
                 ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  _formKey.currentState!.validate();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFB9FF2C),
+                  foregroundColor: const Color(0xFF212529),
+                ),
+                child: const Text('Guardar hábito'),
               ),
             ),
           ],
