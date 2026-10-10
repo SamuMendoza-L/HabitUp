@@ -21,6 +21,9 @@ class _HomeScreenState extends State<HomeScreen> {
   int get completedHabitsCount =>
       habits.where((habit) => habit.isCompleted).length;
 
+  double get progress =>
+      habits.isEmpty ? 0 : completedHabitsCount / habits.length;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,6 +71,40 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: Color(0xFF6C757D),
                 ),
               ],
+            ),
+            const SizedBox(height: 24),
+            Card(
+              color: const Color(0xFFB9FF2C),
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Tu progreso de hoy',
+                      style: TextStyle(
+                        color: Color(0xFF212529),
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: LinearProgressIndicator(
+                        value: progress,
+                        minHeight: 8,
+                        color: const Color(0xFF212529),
+                        backgroundColor: const Color(0x80FFFFFF),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
             const SizedBox(height: 24),
             const Text(
