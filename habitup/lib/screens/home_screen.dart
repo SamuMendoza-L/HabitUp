@@ -18,6 +18,9 @@ class _HomeScreenState extends State<HomeScreen> {
     Habit(name: 'Planear mi día'),
   ];
 
+  int get completedHabitsCount =>
+      habits.where((habit) => habit.isCompleted).length;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,7 +95,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     child: CheckboxListTile(
                       value: habit.isCompleted,
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        setState(() {
+                          habit.isCompleted = value ?? false;
+                        });
+                      },
                       activeColor: const Color(0xFFB9FF2C),
                       checkColor: const Color(0xFF212529),
                       controlAffinity: ListTileControlAffinity.trailing,
